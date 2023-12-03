@@ -29,7 +29,7 @@ in vec3 color;
 in float distance;
 in int returnNumber;
 in int numberOfReturns;
-in mediump int pointSourceId;
+in int pointSourceId;
 in int classification;
 //in float heightAboveGround;
 
@@ -76,7 +76,7 @@ void main()
         pointColor = vec3(0.2*returnNumber*exposure, 0.2*numberOfReturns*exposure, 0);
     else if (colorMode == 3)
     {
-        markerShape = int(mod(pointSourceId+1, 5));
+        markerShape = (pointSourceId+1) % 5;
         vec3 cols[] = vec3[](
             vec3(1, 1, 1),   // White
             vec3(1, 0, 0),   // Red
@@ -99,7 +99,7 @@ void main()
             vec3(0.7, 0.2, 0.5),   // Raspberry
             vec3(0.2, 0.5, 0.7)    // Sky Blue
         );
-        pointColor = cols[int(mod(pointSourceId + 3, cols.length()))];
+        pointColor = cols[(pointSourceId + 3) % cols.length()];
     }
     else if (colorMode == 4)
     {
