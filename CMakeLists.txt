@@ -73,6 +73,8 @@ if (DISPLAZ_USE_LAS)
     else()
         # laslib support
         find_package(LASlib REQUIRED)
+        find_package(minilas REQUIRED)
+        find_package(lazrs_cpp REQUIRED)
         include_directories(${LASLIB_INCLUDE_DIRS})
     endif()
 endif()

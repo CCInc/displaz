@@ -48,3 +48,17 @@ ExternalProject_Add(
     DOWNLOAD_DIR "${DOWNLOAD_DIR}"
 )
 
+ExternalProject_Add(
+    lazrs
+    SOURCE_DIR ${CMAKE_SOURCE_DIR}/../../../laz-rs-c
+    # GIT_REPOSITORY https://github.com/laz-rs/laz-rs-c.git
+    # GIT_TAG dc7f832
+    CMAKE_ARGS
+        -D CMAKE_CXX_FLAGS:STRING=${CMAKE_CXX_FLAGS}
+        -D CMAKE_BUILD_TYPE:STRING=${CMAKE_BUILD_TYPE}
+        -D CMAKE_INSTALL_PREFIX:PATH=<INSTALL_DIR>
+        -D PARALLEL_FEATURE:BOOL=ON
+        -D BUILD_SHARED_LIBS:BOOL=OFF
+    INSTALL_DIR "${CMAKE_INSTALL_PREFIX}"
+    DOWNLOAD_DIR "${DOWNLOAD_DIR}"
+)

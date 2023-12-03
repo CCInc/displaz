@@ -78,7 +78,8 @@ set(gui_srcs
     DrawCostModel.cpp
     geometrycollection.cpp
     ply_io.cpp
-    las_io.cpp
+    # las_io.cpp
+    las_io_lazrs.cpp
     PolygonBuilder.cpp
     HookFormatter.cpp
     HookManager.cpp
@@ -177,7 +178,7 @@ if (DISPLAZ_USE_LAS)
     if (DISPLAZ_USE_PDAL)
         target_link_libraries(displaz ${PDAL_LIBRARIES})
     else()
-        target_link_libraries(displaz ${LASLIB_LIBRARIES})
+        target_link_libraries(displaz ${MINILAS_LIBRARIES} ${LAZRS_CPP_LIBRARIES} ${LASLIB_LIBRARIES})
     endif()
 endif()
 
