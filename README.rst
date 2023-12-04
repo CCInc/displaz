@@ -68,17 +68,18 @@ The following commands may be used to build displaz on linux::
     mkdir build_external
     cd build_external
     cmake ../thirdparty/external
-    make -j4
+    cmake --build .
     cd ..
 
     # Build displaz
     mkdir build
     cd build
     cmake ..
-    make -j4
+    cmake --build .
 
     # Install into CMAKE_INSTALL_PREFIX=/usr/local
-    sudo make install
+    sudo cmake --install .
+    sudo ldconfig
 
 
 Troubleshooting:

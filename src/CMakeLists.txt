@@ -179,6 +179,7 @@ if (DISPLAZ_USE_LAS)
         target_link_libraries(displaz ${PDAL_LIBRARIES})
     else()
         target_link_libraries(displaz ${MINILAS_LIBRARIES} ${LAZRS_CPP_LIBRARIES} ${LASLIB_LIBRARIES})
+        install (FILES ${LAZRS_CPP_LIBRARIES} DESTINATION lib)
     endif()
 endif()
 

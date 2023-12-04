@@ -120,8 +120,6 @@ bool PointArray::loadLas(QString fileName, size_t maxPointCount,
       //                  fileName, readCount);
       break;
     }
-    if (readCount % 100 == 0)
-      std::cout << "Point " << readCount << " / " << totalPoints << std::endl;
     // copy 50 bytes from point_data into point_buffer
     std::copy(it, it + lasReader->header.point_data_record_length,
               point_buffer);

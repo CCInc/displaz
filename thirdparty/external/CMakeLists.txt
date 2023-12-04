@@ -50,9 +50,9 @@ ExternalProject_Add(
 
 ExternalProject_Add(
     lazrs
-    SOURCE_DIR ${CMAKE_SOURCE_DIR}/../../../laz-rs-c
-    # GIT_REPOSITORY https://github.com/laz-rs/laz-rs-c.git
-    # GIT_TAG dc7f832
+    # SOURCE_DIR ${CMAKE_SOURCE_DIR}/../../../laz-rs-c
+    GIT_REPOSITORY https://github.com/CCInc/laz-rs-c.git
+    GIT_TAG b81306f
     CMAKE_ARGS
         -D CMAKE_CXX_FLAGS:STRING=${CMAKE_CXX_FLAGS}
         -D CMAKE_BUILD_TYPE:STRING=${CMAKE_BUILD_TYPE}
