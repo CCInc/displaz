@@ -71,6 +71,7 @@ bool PointArray::loadLas(QString fileName, size_t maxPointCount,
   fields.push_back(GeomField(TypeSpec::uint8_i(), "numberOfReturns", npoints));
   fields.push_back(GeomField(TypeSpec::uint16_i(), "pointSourceId", npoints));
   fields.push_back(GeomField(TypeSpec::uint8_i(), "classification", npoints));
+  fields.push_back(GeomField(TypeSpec::float32(), "height_norm", npoints));
   if (totalPoints == 0) {
     g_logger.warning("File %s has zero points", fileName);
     return true;
@@ -82,11 +83,16 @@ bool PointArray::loadLas(QString fileName, size_t maxPointCount,
   uint8_t *numReturns = fields[3].as<uint8_t>();
   uint16_t *pointSourceId = fields[4].as<uint16_t>();
   uint8_t *classification = fields[5].as<uint8_t>();
+  float *height_norm = fields[6].as<float>();
   uint64_t readCount = 0;
   uint64_t nextDecimateBlock = 1;
   uint64_t nextStore = 1;
   size_t storeCount = 0;
   QRandomGenerator rand;
+
+  double min_z = std::numeric_limits<double>::max();
+  double max_z = -std::numeric_limits<double>::max();
+
   //   if (!lasReader->read_point())
   //     return false;
   //   const LASpoint &point = lasReader->point;
@@ -132,6 +138,8 @@ bool PointArray::loadLas(QString fileName, size_t maxPointCount,
     V3d P = V3d(point.get_x(), point.get_y(), point.get_z());
     if (readCount < nextStore)
       continue;
+    min_z = std::min(min_z, P.z);
+    max_z = std::max(max_z, P.z);
     ++storeCount;
     // Store the point
     *position++ = P - offset;
@@ -181,5 +189,13 @@ bool PointArray::loadLas(QString fileName, size_t maxPointCount,
       fields[i].size = npoints;
     totalPoints = readCount;
   }
+
+  position = (V3f *)fields[0].as<float>();
+  // todo: compute minz ourselves
+  for (size_t i = 0; i < npoints; i++) {
+    float z = position[i].z + offset.z;
+    height_norm[i] = (z - min_z) / (max_z - min_z);
+  }
+
   return true;
 }
