@@ -48,15 +48,22 @@ float tonemap(float x, float reference, float contrast)
 
 vec3 jet_colormap(float x)
 {
+    x = clamp(x, 0.0, 1.0); // Ensure x is within the valid range [0, 1]
+    
+    vec3 color;
+
     if (x < 0.125)
-        return vec3(0, 0, 0.5 + 4*x);
-    if (x < 0.375)
-        return vec3(0, 4*(x-0.125), 1);
-    if (x < 0.625)
-        return vec3(4*(x-0.375), 1, 1 - 4*(x-0.375));
-    if (x < 0.875)
-        return vec3(1, 1 - 4*(x-0.625), 0);
-    return vec3(1 - 4*(x-0.875), 0, 0);
+        color = vec3(0.0, 0.0, 0.5 + 4.0 * x);
+    else if (x < 0.375)
+        color = vec3(0.0, 4.0 * (x - 0.125), 1.0);
+    else if (x < 0.625)
+        color = vec3(4.0 * (x - 0.375), 1.0, 1.0 - 4.0 * (x - 0.375));
+    else if (x < 0.875)
+        color = vec3(1.0, 1.0 - 4.0 * (x - 0.625), 0.0);
+    else
+        color = vec3(1.0 - 4.0 * (x - 0.875), 0.0, 0.0);
+
+    return color;
 }
 
 void main()

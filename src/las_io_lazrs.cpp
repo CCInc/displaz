@@ -90,8 +90,8 @@ bool PointArray::loadLas(QString fileName, size_t maxPointCount,
   size_t storeCount = 0;
   QRandomGenerator rand;
 
-  double min_z = std::numeric_limits<double>::max();
-  double max_z = -std::numeric_limits<double>::max();
+  double mean = 0.0;
+  double sumSquaredDifferences = 0.0;
 
   //   if (!lasReader->read_point())
   //     return false;
@@ -138,8 +138,8 @@ bool PointArray::loadLas(QString fileName, size_t maxPointCount,
     V3d P = V3d(point.get_x(), point.get_y(), point.get_z());
     if (readCount < nextStore)
       continue;
-    min_z = std::min(min_z, P.z);
-    max_z = std::max(max_z, P.z);
+    mean += P.z;
+    sumSquaredDifferences += P.z * P.z;
     ++storeCount;
     // Store the point
     *position++ = P - offset;
@@ -190,10 +190,20 @@ bool PointArray::loadLas(QString fileName, size_t maxPointCount,
     totalPoints = readCount;
   }
 
+  mean /= npoints;
+  double stdDev = sqrt((sumSquaredDifferences / npoints) - (mean * mean));
   position = (V3f *)fields[0].as<float>();
+  double z_score = 2.5;
+  double max_z = mean + z_score * stdDev;
+  double min_z = mean - z_score * stdDev;
   // todo: compute minz ourselves
   for (size_t i = 0; i < npoints; i++) {
     float z = position[i].z + offset.z;
+    if (z > max_z)
+      z = max_z;
+    if (z < min_z)
+      z = min_z;
+
     height_norm[i] = (z - min_z) / (max_z - min_z);
   }
 
